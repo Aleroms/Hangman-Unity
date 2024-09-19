@@ -1,5 +1,6 @@
 ﻿using Hangman.GameCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace Hangman.Local
     public class LocalWordGenerator : MonoBehaviour, IWordGenerator
     {
         private readonly Dictionary<GameDifficulty, List<string>> _wordList;
+        private string fetchedWord = "";
+        [SerializeField] private GameObject fetchWordText;
 
         public LocalWordGenerator()
         {
@@ -64,15 +67,20 @@ namespace Hangman.Local
                 }
             };
         }
+        private void Start()
+        {
+            fetchWordText.SetActive(false);
+        }
         public string GenerateWord(GameDifficulty game)
         {
             var matchingWords = _wordList[game];
 
             if (matchingWords.Count == 0)
-                return "";
+                fetchedWord = "";
 
             var random = new System.Random();
-            return matchingWords[random.Next(matchingWords.Count)];
+            fetchedWord = matchingWords[random.Next(matchingWords.Count)];
+            return fetchedWord;
         }
 
 

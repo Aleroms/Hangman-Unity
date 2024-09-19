@@ -27,7 +27,7 @@ public class UnityPlayer : MonoBehaviour, IPlayerInputHandler
 
     public void ResetLives()
     {
-        throw new System.NotImplementedException();
+        Lives = _defaultLives;
     }
 
     
