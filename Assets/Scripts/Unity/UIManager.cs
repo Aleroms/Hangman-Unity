@@ -32,7 +32,5 @@ public class UIManager : MonoBehaviour
     public void IsLoading(bool isLoading)
     {
         _loadingPopup.SetActive(isLoading);
-        ToggleGameMode();
-
     }
 }

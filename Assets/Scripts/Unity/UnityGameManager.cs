@@ -5,6 +5,7 @@ using Hangman.GameInterface;
 using Hangman.Local;
 using System;
 using System.Collections;
+using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -64,22 +65,15 @@ public class UnityGameManager : MonoBehaviour
     public void FetchWord()
     {
         StartCoroutine(FetchWordCoroutine(_gameDifficulty));
-        
-        /*
-        if (string.IsNullOrEmpty(_masterWord))
-        {
-            Debug.LogError("failed to load word");
-            return;
-        }
-
+    }
+    private void SetDisplayWord()
+    {
         _displayWord = new char[_masterWord.Length];
 
         for (int i = 0; i < _masterWord.Length; i++)
         {
             _displayWord[i] = '_';
         }
-        */
-
     }
     
     public void Reset()
@@ -98,8 +92,6 @@ public class UnityGameManager : MonoBehaviour
     {
         Setup();
         FetchWord();
-        
-        //Run();
     }
 
     public void Setup()
@@ -114,6 +106,8 @@ public class UnityGameManager : MonoBehaviour
         string uri = "https://6owlahqw42.execute-api.us-east-1.amazonaws.com/dev/" 
             + AWSBedrock.ModelPrompt(game.ToString());
         UnityWebRequest request = UnityWebRequest.Get(uri);
+
+        _uiManager.IsLoading(true);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.ConnectionError ||
@@ -125,15 +119,14 @@ public class UnityGameManager : MonoBehaviour
         {
             // Get the response text
             var response = JsonUtility.FromJson<Root_Anthropic>(request.downloadHandler.text);
-
-            string word = response.body.completion;
             // Process the word as needed
-            Debug.Log(word);
-            _masterWord = AWSBedrock.Sanitize(word);
-            Debug.Log(_masterWord);
+            _masterWord = AWSBedrock.Sanitize(response.body.completion);
+
+            SetDisplayWord();
 
         }
-
+        Run();
+        _uiManager.IsLoading(false);
         _uiManager.ToggleGameMode();
     }
 
