@@ -17,7 +17,6 @@ public class UnityGameManager : MonoBehaviour
     private string _masterWord;
     private string _guessedWords = "";
     private char[] _displayWord;
-    private bool _playAgain = false;
 
     private UnitySetupManager _setupManager;
     private UIManager _uiManager;
@@ -82,11 +81,46 @@ public class UnityGameManager : MonoBehaviour
     }
     public void Run()
     {
+        // update the state UI
+        // if the game is not over
+        // check the user's guess
         _hangman.DisplayState(_playerInputHandler.Lives, _displayWord, _guessedWords);
         if(!IsGameOver(_playerInputHandler.Lives))
         {
 
         }
+    }
+
+    public void PlayerTurn(int index)
+    {
+        Debug.Log("called");
+        char c = (char)((int)'a' + index - 1);
+        Debug.Log(c);
+        if (!EvaluateGuess(c))
+            _playerInputHandler.Lives--;
+        
+        _hangman.DisplayState(_playerInputHandler.Lives, _displayWord, _guessedWords);
+        
+        if (IsGameOver(_playerInputHandler.Lives))
+        {
+            //remove interactivity with keyboard
+            _uiManager.StopKeyboard();
+
+            if (_playerInputHandler.Lives < 1)
+            {
+                Debug.Log("You lose");
+                _uiManager.DidPlayerLose(true, _masterWord);
+            }
+            else
+            {
+                
+                _playerInputHandler.Victories++;
+                Debug.Log("winner");
+                _uiManager.DidPlayerLose(false, _masterWord);
+                //write victory count //storage
+            }
+        }
+
     }
     public void StartGame()
     {
@@ -125,7 +159,8 @@ public class UnityGameManager : MonoBehaviour
             SetDisplayWord();
 
         }
-        Run();
+        //Run();
+        _hangman.DisplayState(_playerInputHandler.Lives, _displayWord, _guessedWords);
         _uiManager.IsLoading(false);
         _uiManager.ToggleGameMode();
     }
