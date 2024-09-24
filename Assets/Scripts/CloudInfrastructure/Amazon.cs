@@ -33,7 +33,7 @@ namespace Hangman.CloudInfrastructure
             FoundationalModel == FoundationalModel.META_LLAMA3
                 ? Regex.Replace(text, @"[^a-z]", "")
                 : FoundationalModel == FoundationalModel.ANTHROPIC_CLAUDE1
-                    ? Regex.Replace(text, @"\((\s*[a-zA-Z]+\s*)\)", "$1")
+                    ? text.Trim('(',')', ' ')
                     : text;
 
 

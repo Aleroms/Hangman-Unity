@@ -39,9 +39,8 @@ public class UIManager : MonoBehaviour
     {
         _loadingPopup.SetActive(isLoading);
     }
-    public void DidPlayerLose(bool playerLost, string word)
+    public void DidPlayerLose(bool playerLost, string word, int gamesWon)
     {
-        Debug.Log(playerLost + word);
         if (playerLost)
         {
             _loseGO.SetActive(true);
@@ -54,7 +53,7 @@ public class UIManager : MonoBehaviour
         }
 
         GameObject.Find("gamesWon").GetComponent<TextMeshProUGUI>()
-                .text = "Games Won: " + 0;
+                .text = "Games Won: " + gamesWon;
     }
     public void PlayAgain()
     {

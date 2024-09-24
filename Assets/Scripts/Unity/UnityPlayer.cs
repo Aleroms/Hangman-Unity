@@ -5,6 +5,7 @@ using Hangman.GameCore;
 
 public class UnityPlayer : MonoBehaviour, IPlayerInputHandler
 {
+    
     private static readonly int _defaultLives = 6;
     public int Lives { get; set; }
     public int Victories { get; set; }

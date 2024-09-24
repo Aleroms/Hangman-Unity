@@ -865,7 +865,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 754177643}
         m_TargetAssemblyTypeName: UnityGameManager, Assembly-CSharp
-        m_MethodName: FetchWord
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1360,7 +1360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &295743707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4838,7 +4838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1120904336
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6781,7 +6781,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.4913635, y: -2.526001}
+  m_AnchoredPosition: {x: -6.491333, y: -2.526001}
   m_SizeDelta: {x: -90.6169, y: -52.9609}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1532650349
@@ -6987,7 +6987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1662329099
 RectTransform:
   m_ObjectHideFlags: 0

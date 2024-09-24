@@ -21,7 +21,7 @@ public class UnityHangman : MonoBehaviour, IHangman
         string displayGuessedLetters = string.Join(" ", guessedWords);
         string word = "";
         foreach (char c in displayedWords) word += c;
-        Debug.Log($"lives:{lives} displayWords:{word} guessedWords:{guessedWords}");
+        //Debug.Log($"lives:{lives} displayWords:{word} guessedWords:{guessedWords}");
 
         _hangman.sprite = _state[lives];
         _displayWords.text = word;

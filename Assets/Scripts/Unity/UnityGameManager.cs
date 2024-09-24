@@ -2,10 +2,9 @@ using Hangman.AI;
 using Hangman.CloudInfrastructure;
 using Hangman.GameCore;
 using Hangman.GameInterface;
-using Hangman.Local;
+//using Hangman.Local;
 using System;
 using System.Collections;
-using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -79,23 +78,10 @@ public class UnityGameManager : MonoBehaviour
     {
         throw new NotImplementedException();
     }
-    public void Run()
-    {
-        // update the state UI
-        // if the game is not over
-        // check the user's guess
-        _hangman.DisplayState(_playerInputHandler.Lives, _displayWord, _guessedWords);
-        if(!IsGameOver(_playerInputHandler.Lives))
-        {
-
-        }
-    }
-
     public void PlayerTurn(int index)
     {
-        Debug.Log("called");
         char c = (char)((int)'a' + index - 1);
-        Debug.Log(c);
+
         if (!EvaluateGuess(c))
             _playerInputHandler.Lives--;
         
@@ -108,16 +94,15 @@ public class UnityGameManager : MonoBehaviour
 
             if (_playerInputHandler.Lives < 1)
             {
-                Debug.Log("You lose");
-                _uiManager.DidPlayerLose(true, _masterWord);
-            }
+                _uiManager.DidPlayerLose(true, _masterWord, _playerInputHandler.Victories);
+            } 
             else
             {
-                
+                // save new record
                 _playerInputHandler.Victories++;
-                Debug.Log("winner");
-                _uiManager.DidPlayerLose(false, _masterWord);
-                //write victory count //storage
+                _storage.Write("victories",_playerInputHandler.Victories.ToString());
+
+                _uiManager.DidPlayerLose(false, _masterWord, _playerInputHandler.Victories);
             }
         }
 
@@ -132,7 +117,8 @@ public class UnityGameManager : MonoBehaviour
     {
 
         //load victories
-        _playerInputHandler.Victories = int.Parse(_storage.Read("victories.txt"));
+        _playerInputHandler.Victories = int.Parse(_storage.Read("victories"));
+        Debug.Log("victories after loading: " +  _playerInputHandler.Victories);
         _gameDifficulty = _setupManager.GameMode;
     }
     private IEnumerator FetchWordCoroutine(GameDifficulty game)
@@ -153,13 +139,12 @@ public class UnityGameManager : MonoBehaviour
         {
             // Get the response text
             var response = JsonUtility.FromJson<Root_Anthropic>(request.downloadHandler.text);
+
             // Process the word as needed
             _masterWord = AWSBedrock.Sanitize(response.body.completion);
-
             SetDisplayWord();
-
         }
-        //Run();
+
         _hangman.DisplayState(_playerInputHandler.Lives, _displayWord, _guessedWords);
         _uiManager.IsLoading(false);
         _uiManager.ToggleGameMode();
