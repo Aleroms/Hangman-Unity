@@ -11,15 +11,12 @@ using UnityEngine.Networking;
 public class UnityGameManager : MonoBehaviour
 {
     private GameDifficulty _gameDifficulty;
-    // temporarily set masterword to public for debugging
-    [SerializeField]
     private string _masterWord;
     private string _guessedWords = "";
     private char[] _displayWord;
 
     private UnitySetupManager _setupManager;
     private UIManager _uiManager;
-    private IWordGenerator _wordGenerator;
     private IPlayerInputHandler _playerInputHandler;
     private IHangman _hangman;
     private IStorage _storage;
@@ -30,7 +27,6 @@ public class UnityGameManager : MonoBehaviour
         
         _setupManager = this.GetComponent<UnitySetupManager>();
         _uiManager = this.GetComponent<UIManager>();
-        _wordGenerator = this.GetComponent<IWordGenerator>();
         _hangman = this.GetComponent<IHangman>();
         _playerInputHandler = this.GetComponent<IPlayerInputHandler>();
         _storage = this.GetComponent<IStorage>();
@@ -58,7 +54,7 @@ public class UnityGameManager : MonoBehaviour
         return isCorrectGuess;
     }
 
-    private bool IsMasterWordGuessed() => _masterWord == new string(_displayWord);
+    private bool IsMasterWordGuessed() => _masterWord.ToLower() == new string(_displayWord).ToLower();
 
     public void FetchWord()
     {
@@ -81,6 +77,10 @@ public class UnityGameManager : MonoBehaviour
     public void PlayerTurn(int index)
     {
         char c = (char)((int)'a' + index - 1);
+
+        //check if user has already entered that guess
+        if (_guessedWords.Contains(c))
+            return;
 
         if (!EvaluateGuess(c))
             _playerInputHandler.Lives--;
@@ -118,7 +118,6 @@ public class UnityGameManager : MonoBehaviour
 
         //load victories
         _playerInputHandler.Victories = int.Parse(_storage.Read("victories"));
-        Debug.Log("victories after loading: " +  _playerInputHandler.Victories);
         _gameDifficulty = _setupManager.GameMode;
     }
     private IEnumerator FetchWordCoroutine(GameDifficulty game)

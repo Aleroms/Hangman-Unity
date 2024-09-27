@@ -13,8 +13,8 @@ namespace Hangman.ExternalAPI
 
     public class APIWordGenerator : IWordGenerator
     {
-        private static readonly string _uri = "https://6owlahqw42.execute-api.us-east-1.amazonaws.com/dev/";
-        //private static readonly string _uri = "https://google.com";
+        //private static readonly string _uri = "https://6owlahqw42.execute-api.us-east-1.amazonaws.com/dev/";
+
 
         public APIWordGenerator(FoundationalModel model)
         {
